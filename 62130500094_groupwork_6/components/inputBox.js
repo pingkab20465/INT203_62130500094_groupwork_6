@@ -18,7 +18,7 @@ app.component('input-box',{
     computed: {
         errorInfo() {
             this.haveError = this.errorsObj[this.varName] ? true : false;
-            return this.errorsObj[this.varName] ? this.errorsObj[this.varName] : "No Error!";
+            return this.errorsObj[this.varName] ? this.errorsObj[this.varName] : ["No Error!"];
         }
     },
     methods: {
