@@ -26,55 +26,35 @@
 
 </head>
 
-<body>
+<body class="bg-blue-100">
     <div id="app">
         <form @submit.prevent="checkForm">
-            <div class="container w-2/5 p-8 mx-auto mt-10 mb-10 border rounded-lg shadow-2xl">
-                <h1 class="font-bold text-2xl pt-4 pb-4">My Profile Form (with Validation)</h1>
-                <p v-if="errors" class="text-red-500">
-                    <b>Please correct the following error(s):</b>
-                    <ul>
-                        <li v-for="error in errors" class="text-red-500">{{ error }}</li>
-                    </ul>
+            <div class="container w-2/5 p-8 mx-auto mt-10 mb-10 border rounded-lg shadow-2xl bg-gray-50">
+                <h1 class="font-bold text-2xl pb-2">My Profile Form (with Validation)</h1>
+                <p v-show="Object.keys(errors).length != 0" class="text-red-500">
+                    <b>Please correct the error(s) below!</b>
                 </p>
                 <img class="rounded-full w-24 border border-gray-100 shadow-2xl mb-2 mt-2" src="./images/62130500094pic.jpg">
                 <div class="grid grid-cols-2 gap-4">
-                    <div class="flex flex-col">
-                        <label for="firstname" class="text-sm leading-7 text-gray-600">First Name <span class="text-red-600">*</span></label>
-                        <input type="text" id="firstname" v-model="firstname" name="firstname"
-                            class="bg-gray-100 rounded px-4 py-2 mb-4">
-                    </div>
-                    <div class="flex flex-col">
-                        <label for="lastname" class="text-sm leading-7 text-gray-600">Last Name <span class="text-red-600">*</span></label>
-                        <input type="text" id="lastname" v-model="lastname" name="lastname"
-                            class="bg-gray-100 rounded px-4 py-2 mb-4">
-                    </div>
-                    <div class="flex flex-col">
-                        <label for="birthday" class="text-sm leading-7 text-gray-600">Birthday <span class="text-red-600">*</span></label>
-                        <input type="date" id="birthday" v-model="birthday" name="birthday"
-                            class="bg-gray-100 rounded px-4 py-2 mb-4">
-                    </div>
+                    <input-box required="1" type="text" var-name="firstname" @box-input-changed="updateFormDataElement" :errors-obj="errors">First Name</input-box>
+                    <input-box required="1" type="text" var-name="lastname" @box-input-changed="updateFormDataElement" :errors-obj="errors">Last Name</input-box>
+                    <input-box required="1" type="date" var-name="birthday" @box-input-changed="updateFormDataElement" :errors-obj="errors">Birthday</input-box>
+                    <!-- Start of gender radio input -->
                     <div class="flex flex-col">
                         <label class="text-sm leading-7 text-gray-600">Gender <span class="text-red-600">*</span></label>
-                        <div class="flex flex-row pt-2 space-x-2">
-                            <input type="radio" id="Male" v-model="gender" name="gender" value="M"
-                                class="bg-gray-100 rounded px-4 py-2 mb-4">
-                            <label for="Male">Male</label>
-                            <input type="radio" id="Female" v-model="gender" name="gender" value="F"
-                                class="bg-gray-100 rounded px-4 py-2 mb-4">
-                            <label for="Female">Female</label>
+                        <div class="flex flex-row py-2 space-x-2 items-center">
+                            <input type="radio" id="male" v-model="formData.gender" name="gender" value="M"
+                                class="bg-gray-100 rounded px-4 py-2">
+                            <label for="male">Male</label>
+                            <input type="radio" id="female" v-model="formData.gender" name="gender" value="F"
+                                class="bg-gray-100 rounded px-4 py-2">
+                            <label for="female">Female</label>
                         </div>
+                        <span v-show="errors['gender']" class="text-red-500 font-medium" v-for="eachErrorInfo in errors['gender']">{{eachErrorInfo}}</span>
                     </div>
-                    <div class="flex flex-col">
-                        <label for="email" class="text-sm leading-7 text-gray-600">Email <span class="text-red-600">*</span></label>
-                        <input type="text" id="email" v-model="email" name="email"
-                            class="bg-gray-100 rounded px-4 py-2 mb-4">
-                    </div>
-                    <div class="flex flex-col">
-                        <label for="phone" class="text-sm leading-7 text-gray-600">Phone Number <span class="text-red-600">*</span></label>
-                        <input type="text" id="phone" v-model="phone" name="phone"
-                            class="bg-gray-100 rounded px-4 py-2 mb-4">
-                    </div>
+                    <!-- End of gender radio input -->
+                    <input-box required="1" type="text" var-name="email" @box-input-changed="updateFormDataElement" :errors-obj="errors">Email</input-box>
+                    <input-box required="1" max-length="10" type="text" var-name="phone" @box-input-changed="updateFormDataElement" :errors-obj="errors">Phone Number</input-box>
                     <div>
                         <input type="submit" value="Save Changes"
                             class="px-8 py-2 text-white bg-purple-500 rounded-lg hover:bg-purple-600 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2">
@@ -86,6 +66,8 @@
 
     <!-- my main.js -->
     <script src="./main.js"></script>
+    <script src="./components/inputBox.js"></script>
+    <script>rootComponentInstance = app.mount('#app');</script>
 </body>
 
 </html>

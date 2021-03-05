@@ -14,13 +14,13 @@ validate.extend(validate.validators.datetime, {
 
 const constraints = {
     firstname: {
-        presence: true,
+        presence: {allowEmpty: false, message: "^First Name can't be blank"}
     },
     lastname: {
-        presence: true,
+        presence: {allowEmpty: false, message: "^Last Name can't be blank"},
     },
     birthday: {
-        presence: true,
+        presence: {allowEmpty: false},
         datetime: {
             dateOnly: true,
             latest: moment.utc(),
@@ -28,20 +28,21 @@ const constraints = {
         }
     },
     gender: {
-        presence: true,
+        presence: {allowEmpty: false},
     },
     email: {
-        presence: true,
+        presence: {allowEmpty: false},
         email: true
     },
     phone: {
-        presence: true,
+        presence: {allowEmpty: false, message: "^Phone Number can't be blank"},
         numericality: {
-            message: "must be numeric"
+            message: "^Phone Number must be numeric"
         },
         length: {
             minimum: 10,
-            message: "must be at least 10 digits"
+            maximum: 10,
+            message: "^Phone Number must be 10 digits"
         }
     }
 }
@@ -49,31 +50,26 @@ const constraints = {
 const app = Vue.createApp({
     data() {
         return {
-            firstname: null,
-            lastname: null,
-            birthday: null,
-            gender: null,
-            email: null,
-            phone: null,
-            errors: null,
+            formData: {
+                firstname: null,
+                lastname: null,
+                birthday: null,
+                gender: null,
+                email: null,
+                phone: null
+            },
+            errors: {},
         }
     },
     methods: {
         checkForm() {
-            this.errors = validate({
-                    firstname: this.firstname,
-                    lastname: this.lastname,
-                    birthday: this.birthday,
-                    gender: this.gender,
-                    email: this.email,
-                    phone: this.phone
-                },
-                constraints)
-            if (!this.errors) {
+            this.errors = validate(this.formData, constraints) ? validate(this.formData, constraints) : {};
+            if (Object.keys(this.errors).length == 0) {
                 alert("Your profile is updated successfully.");
             }
+        },
+        updateFormDataElement(obj) {
+            this.formData[obj.name] = obj.value;
         }
     }
 })
-
-rootComponentInstance = app.mount('#app');
